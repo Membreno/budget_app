@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Check 2 Check</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'application/style.css' %}">
+        <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="{% static 'application/script.js' %}"></script>
+    </head>
+    <body class="dashboard">
+        <div class="container mt-3">
+            <h1 class="text-center display-4 heading">Welcome</h1>
+
+            <!--mini_content STARTS -->
+            <div class="mx-auto">
+                <h2 class="login d-lg-none text-center">login</h2>
+                <form class="login d-lg-none align-top" action="/login_user" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="login_email">Email:
+                            {%if messages%}
+                                {% for message in messages %}
+                                    {% if message.extra_tags == "login_email" %}
+                                        <p class="text-danger d-inline">{{message}}</p>
+                                    {% endif %}
+                                {%endfor%}
+                            {% endif %}
+                        </label>
+                        <input type="text" name="login_email" class="form-control shadow">
+                    </div>
+                    <div class="form-group">
+                        <label for="login_password">Password:
+                            {%if messages%}
+                                {% for message in messages %}
+                                    {% if message.extra_tags == "login_password" %}
+                                        <p class="text-danger d-inline">{{message}}</p>
+                                    {% endif %}
+                                {%endfor%}
+                            {% endif %}
+                        </label>
+                        <input type="password" name="login_password" class="form-control shadow">
+                    </div>
+                    <input type="submit" value="Log In" class="btn btn-outline-info shadow font-weight-bold">
+                </form>
+
+                <h2 class="text-center d-lg-none">-or-</h2>
+                <h2 class="register d-lg-none text-center">register</h2>
+                <form class="register d-lg-none" action="/add_user" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="first_name">First Name:
+                            {%if messages%}
+                                {% for message in messages %}
+                                    {% if message.extra_tags == "first_name" %}
+                                        <p class="text-danger d-inline">{{message}}</p>
+                                    {% endif %}
+                                {%endfor%}
+                            {% endif %}
+                        </label>
+                        <input type="text" name="first_name" class="form-control col-10 shadow">
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name:
+                            {%if messages%}
+                                {% for message in messages %}
+                                    {% if message.extra_tags == "last_name" %}
+                                        <p class="text-danger d-inline">{{message}}</p>
+                                    {% endif %}
+                                {%endfor%}
+                            {% endif %}
+                        </label>
+                        <input type="text" name="last_name" class="form-control col-10 shadow">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:
+                            {%if messages%}
+                                {% for message in messages %}
+                                    {% if message.extra_tags == "email" %}
+                                        <p class="text-danger d-inline">{{message}}</p>
+                                    {% endif %}
+                                {%endfor%}
+                            {% endif %}
+                        </label>
+                        <input type="text" name="email" class="form-control col-10 shadow">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:
+                            {%if messages%}
+                                {% for message in messages %}
+                                    {% if message.extra_tags == "password" %}
+                                        <p class="text-danger d-inline">{{message}}</p>
+                                    {% endif %}
+                                {%endfor%}
+                            {% endif %}
+                        </label>
+                        <input type="password" name="password" class="form-control col-10 shadow">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password:
+                            {%if messages%}
+                                {% for message in messages %}
+                                    {% if message.extra_tags == "confirm_password" %}
+                                        <p class="text-danger d-inline">{{message}}</p>
+                                    {% endif %}
+                                {%endfor%}
+                            {% endif %}
+                        </label>
+                        <input type="password" name="confirm_password" class="form-control col-10 shadow">
+                    </div>
+                    <input type="submit" value="Register" class="btn btn-outline-info shadow font-weight-bold">
+                </form>
+            </div>
+            <!--mini_content ENDS -->
+
+            <form class="d-none d-lg-inline-block col-7" action="/add_user" method="post">
+                {% csrf_token %}
+                <h2>register</h2>
+                <div class="form-group">
+                    <label for="first_name">First Name:
+                        {%if messages%}
+                            {% for message in messages %}
+                                {% if message.extra_tags == "first_name" %}
+                                    <p class="text-danger d-inline">{{message}}</p>
+                                {% endif %}
+                            {%endfor%}
+                        {% endif %}
+                    </label>
+                    <input type="text" name="first_name" class="form-control col-10 shadow">
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name:
+                        {%if messages%}
+                            {% for message in messages %}
+                                {% if message.extra_tags == "last_name" %}
+                                    <p class="text-danger d-inline">{{message}}</p>
+                                {% endif %}
+                            {%endfor%}
+                        {% endif %}
+                    </label>
+                    <input type="text" name="last_name" class="form-control col-10 shadow">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:
+                        {%if messages%}
+                            {% for message in messages %}
+                                {% if message.extra_tags == "email" %}
+                                    <p class="text-danger d-inline">{{message}}</p>
+                                {% endif %}
+                            {%endfor%}
+                        {% endif %}
+                    </label>
+                    <input type="text" name="email" class="form-control col-10 shadow">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:
+                        {%if messages%}
+                            {% for message in messages %}
+                                {% if message.extra_tags == "password" %}
+                                    <p class="text-danger d-inline">{{message}}</p>
+                                {% endif %}
+                            {%endfor%}
+                        {% endif %}
+                    </label>
+                    <input type="password" name="password" class="form-control col-10 shadow">
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password:
+                        {%if messages%}
+                            {% for message in messages %}
+                                {% if message.extra_tags == "confirm_password" %}
+                                    <p class="text-danger d-inline">{{message}}</p>
+                                {% endif %}
+                            {%endfor%}
+                        {% endif %}
+                    </label>
+                    <input type="password" name="confirm_password" class="form-control col-10 shadow">
+                </div>
+                <input type="submit" value="Register" class="btn btn-outline-info shadow font-weight-bold">
+            </form>
+
+            <form class="d-none d-lg-inline-block align-top col-4" action="/login_user" method="post">
+                {% csrf_token %}
+                <h2>login</h2>
+                <div class="form-group">
+                    <label for="login_email">Email:
+                        {%if messages%}
+                            {% for message in messages %}
+                                {% if message.extra_tags == "login_email" %}
+                                    <p class="text-danger d-inline">{{message}}</p>
+                                {% endif %}
+                            {%endfor%}
+                        {% endif %}
+                    </label>
+                    <input type="text" name="login_email" class="form-control shadow">
+                </div>
+                <div class="form-group">
+                    <label for="login_password">Password:
+                        {%if messages%}
+                            {% for message in messages %}
+                                {% if message.extra_tags == "login_password" %}
+                                    <p class="text-danger d-inline">{{message}}</p>
+                                {% endif %}
+                            {%endfor%}
+                        {% endif %}
+                    </label>
+                    <input type="password" name="login_password" class="form-control shadow">
+                </div>
+                <input type="submit" value="Log In" class="btn btn-outline-info shadow font-weight-bold">
+            </form>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </body>
+</html>

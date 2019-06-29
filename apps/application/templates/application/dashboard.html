@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Check2Check | Home</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'application/style.css' %}">
+    </head>
+    <body class="dashboard">
+        <nav class="navbar navbar-expand-lg navbar-light mb-4" style="background-color: rgba(0, 0, 0, 0.25);">
+            <a class="navbar-brand" style="color: #78e08f" href="/dashboard">Check2Check</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon text-light"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a href="/bills/new" class="d-lg-none nav-link text-success font-weight-bold">New Bill</a>
+                        <a href="/bills/new" class="d-none d-lg-inline-block btn btn-success p-2 bd-highlight shadow">New Bill</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/logout" class="d-lg-none nav-link font-weight-bold">Log Out<span class="sr-only">(current)</span></a>
+                        <a href="/logout" class="d-none d-lg-inline-block p-2 bd-highlight btn btn-outline-danger ml-2 shadow">Log Out</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container">
+            <h1>Hello, <span class="mint">{{request.session.first_name}}</span>!</h1>
+            <p class="mb-0 text-black-50">Today's Date: {{date}}</p>
+
+            <!--mini_content STARTS -->
+            <div class="sidebar bg-dark container text-center text-light p-2 d-lg-none">
+                {% if user.bank <= 0 %}
+                    <h3>Add Funds</h3>
+                {% elif user.bank > 0 %}
+                    <h3>Total Funds Left</h3>
+                {% endif %}
+                {% if user.bank > 0 and user.bank <= sum %}
+                    <p class="text-warning h3">$ {{user.bank}}</p>
+                {% elif user.bank > 0 %}
+                    <p class="text-success h3">$ {{user.bank}}</p>
+                {% elif user.bank <= 0 %}
+                    <p class="text-danger h3">$ {{user.bank}}</p>
+                {% endif %}
+                <a href="/add_funds" class="btn btn-outline-info">Add Money</a>
+                <a href="/subtract_funds" class="btn btn-outline-warning">Spend</a>
+
+                <a href="#" class="d-block mt-2" data-toggle="modal" data-target="#miniModal">RESET</a>
+                <div class="modal fade" id="miniModal" tabindex="-1" role="dialog" aria-labelledby="miniTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-danger" id="miniTitle">Are you sure?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body text-secondary">This will reset your "Total Funds Left" back to $0</div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                                <a href="/reset_bank" class="btn btn-outline-primary">Continue</a>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- miniModaldiv ENDS -->
+            </div><!-- Funds actions/display ENDS -->
+
+            <div class="mini_content align-top p-0 d-lg-none">
+                <table class="table table-striped table-dark">
+                    <thead class="thead-dark">
+                        <th>Due Date</th>
+                        <th>Bill Name</th>
+                        <th>Amount Due</th>
+                        <th class="text-right w-25">Actions <a href='/reset_bills'>RESET</a></th>
+                    </thead>
+                    <tbody>
+                        {% load humanize %}
+                        {% for bill in bills %}
+                            <tr>
+                                <td>{{bill.due_date |ordinal}}</td>
+                                <td><a href="/bills/{{bill.id}}/edit">{{bill.title}}</a></td>
+                                <td>$ {{bill.amount}}</td>
+                                <td class="text-right">
+                                    {% if bill.paid == False %}
+                                        <a href="/pay/{{bill.id}}" class="btn btn-outline-info">Pay</a>
+                                    {% elif bill.paid == True %}
+                                        <a href="/pay/{{bill.id}}" class="btn btn-outline-info disabled">Pay</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!--mini_content ENDS -->
+
+            <div class="main_content col-9 d-none d-lg-inline-block align-top pl-0">
+                <table class="table table-striped table-dark">
+                    <thead class="thead-dark">
+                        <th>Due Date</th>
+                        <th>Bill Name</th>
+                        <th>Amount Due</th>
+                        <th class="text-right w-25">Actions <a href='/reset_bills'>RESET</a></th>
+                    </thead>
+                    <tbody>
+                        {% load humanize %}
+                        {% for bill in bills %}
+                            <tr>
+                                <td>{{bill.due_date |ordinal}}</td>
+                                <td>{{bill.title}}</td>
+                                <td>$ {{bill.amount}}</td>
+                                <td class="text-right">
+                                    <a href="/bills/{{bill.id}}/edit">Edit</a> |
+                                    <a href="/delete/{{bill.id}}">Remove</a>
+                                    {% if bill.paid == False %}
+                                        <a href="/pay/{{bill.id}}" class="btn btn-outline-info">Pay</a>
+                                    {% elif bill.paid == True %}
+                                        <a href="/pay/{{bill.id}}" class="btn btn-outline-info disabled">Pay</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-2 sidebar bg-dark container text-center text-light rounded p-2 d-none d-lg-inline-block">
+                {% if user.bank <= 0 %}
+                    <h3>Add Funds</h3>
+                {% elif user.bank > 0 %}
+                    <h3>Total Funds Left</h3>
+                {% endif %}
+                {% if user.bank > 0 and user.bank <= sum %}
+                    <p class="text-warning h3">$ {{user.bank}}</p>
+                {% elif user.bank > 0 %}
+                    <p class="text-success h3">$ {{user.bank}}</p>
+                {% elif user.bank <= 0 %}
+                    <p class="text-danger h3">$ {{user.bank}}</p>
+                {% endif %}
+                <a href="/add_funds" class="btn btn-outline-info mb-2">Add Money</a>
+                <a href="/subtract_funds" class="btn btn-outline-warning">Spend</a>
+
+                <a href="#" class="d-block mt-2" data-toggle="modal" data-target="#exampleModalCenter">RESET</a>
+                <!--Below is the Modal(pop-up) for resetting user's bank to 0 -->
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-danger" id="exampleModalCenterTitle">Are you sure?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body text-secondary">This will reset your "Total Funds Left" back to $0</div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                                <a href="/reset_bank" class="btn btn-outline-primary">Continue</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- SIDEBAR ENDS -->
+        </div> <!-- CONTAINER ENDS -->
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </body>
+</html>
