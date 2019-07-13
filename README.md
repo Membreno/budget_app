@@ -1,4 +1,4 @@
-# budget_application
+# Budget Application
 This app was created to help people manage their finances. This is done by giving users the ability to track how much money they have left to spend before they are completely out of funds.
 This is a solution that will give you up to date information about your remaining funds as long as you continue to manage it properly.
 
